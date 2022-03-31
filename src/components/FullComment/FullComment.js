@@ -2,13 +2,13 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import  './fullComment.css'
 
-const FullComment = ({ commentId }) => {
+const FullComment = ({setComments , commentId }) => {
     const [comment, setComment] = useState(null)
 
     useEffect(() => {
         if (commentId) {
             axios
-                .get(`http://jsonplaceholder.typicode.com/comments/${commentId}`)
+                .get(`http://localhost:3001/comments/${commentId}`)
                 .then((res) => setComment(res.data))
                 .catch((err) => console.log(err))
         }
@@ -20,8 +20,10 @@ const FullComment = ({ commentId }) => {
 
     const deleteHandler = () => {
         axios
-        .delete(`https://jsonplaceholder.typicode.com/comments/${commentId}` )
-        .then((res) => console.log(res.data))
+        .delete(`http://localhost:3001/comments/${commentId}` )
+        
+        .then((res) => axios.get("http://localhost:3001/comments"))
+        .then((res) => setComments(res.data))
         .catch((err) => console.log(err))
     }
 
