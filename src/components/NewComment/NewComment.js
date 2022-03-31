@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import styles from './newComment.module.css'
-const NewComment = () => {
+const NewComment = ({setComments}) => {
 
   const [comment , setComment] = useState({
     name  : "",
@@ -16,10 +16,12 @@ const NewComment = () => {
 
 
   const newPostHandler = () => {
-    axios.post("https://jsonplaceholder.typicode.com/comments" , comment)
-    .then((res) => console.log(res.data))
-    .catch((err) => console.log(err))
-  }
+    axios
+        .post("http://localhost:3001/comments", { ...comment, postId: 10 })
+        .then((res) => axios.get("http://localhost:3001/comments"))
+        .then((res) => setComments(res.data))
+        .catch((err) => console.log(err))
+}
 
 
   return (
@@ -28,17 +30,17 @@ const NewComment = () => {
 
       <div className={styles.form_control}>
         <label>name</label>
-        <input type="text" onChange={changeHandler} name="name"/>
+        <input type="text" onChange={changeHandler} name="name" value={comment.name}/>
       </div>
 
       <div className={styles.form_control}>
         <label>email</label>
-        <input type="email" onChange={changeHandler} name="email"/>
+        <input type="email" onChange={changeHandler} name="email" value={comment.email}/>
       </div>
 
       <div className={styles.form_control}>
         <label>body</label>
-        <textarea type="textarea" onChange={changeHandler} name="content"/>
+        <textarea type="textarea" onChange={changeHandler} name="content" value={comment.content}/>
       </div>
 
       <button onClick={newPostHandler}>add Comment</button>
