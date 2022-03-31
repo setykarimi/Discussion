@@ -7,7 +7,6 @@ import axios from 'axios';
 
 const Discussion = () => {
     const [comments, setComments] = useState(null)
-
     const [selectedId, setSelectedId] = useState(null)
 
     // how 2 get data
@@ -34,10 +33,10 @@ const Discussion = () => {
 
 
         axios
-            .get('http://jsonplaceholder.typicode.com/comments')
+            .get('http://localhost:3001/comments')
             .then((response) => {
                 console.log(response);
-                setComments(response.data.slice(7, 11))
+                setComments(response.data)
             }).catch((error) => {
                 console.log(error);
             })
@@ -48,27 +47,31 @@ const Discussion = () => {
         setSelectedId(id)
     }
 
+
+
+
+
+    const renderComments = () => {
+        return comments ? (comments.map((c) =>
+            <Comment
+                key={c.id}
+                name={c.name}
+                email={c.email}
+                onClick={() => selectCommentHandler(c.id)} />)
+        ) :
+            (<p>Loading ...</p>)
+
+    }
+
     return (
         <main>
-            <section>
-                {comments ? (comments.map((c) =>
-                    <Comment
-                        key={c.id}
-                        name={c.name}
-                        email={c.email} 
-                        onClick={() => selectCommentHandler(c.id)} />)
-                ) :
-                    (<p>Loading ...</p>)
-                }
+            <section> {renderComments()}</section>
 
+            <section>
+                <FullComment commentId={selectedId} setComments = {setComments} />
             </section>
-
             <section>
-                <FullComment commentId={selectedId} />
-            </section>
-
-            <section>
-                <NewComment />
+                <NewComment setComments = {setComments} />
             </section>
         </main>);
 }
