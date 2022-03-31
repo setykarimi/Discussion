@@ -1,27 +1,43 @@
 import axios from 'axios';
 import { useState } from 'react';
 import styles from './newComment.module.css'
-const NewComment = ({setComments}) => {
+const NewComment = ({ setComments }) => {
 
-  const [comment , setComment] = useState({
-    name  : "",
-    email : "",
-    content : ""
+  const [comment, setComment] = useState({
+    name: "",
+    email: "",
+    content: ""
   })
 
 
   const changeHandler = (e) => {
-    setComment({...comment , [e.target.name] : e.target.value })
+    setComment({ ...comment, [e.target.name]: e.target.value })
   }
 
 
   const newPostHandler = () => {
     axios
-        .post("http://localhost:3001/comments", { ...comment, postId: 10 })
-        .then((res) => axios.get("http://localhost:3001/comments"))
-        .then((res) => setComments(res.data))
-        .catch((err) => console.log(err))
-}
+      .post("http://localhost:3001/comments", { ...comment, postId: 10 })
+      .then((res) => axios.get("http://localhost:3001/comments"))
+      .then((res) => setComments(res.data))
+      .catch((err) => console.log(err))
+  }
+
+
+
+
+  // By async Await
+  // const newPostHandler = async () => {
+  //   try {
+  //     await axios
+  //       .post("http://localhost:3001/comments", { ...comment, postId: 10 })
+  //     const { data } = axios.get("http://localhost:3001/comments")
+  //     setComments({ data })
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
 
   return (
@@ -30,17 +46,17 @@ const NewComment = ({setComments}) => {
 
       <div className={styles.form_control}>
         <label>name</label>
-        <input type="text" onChange={changeHandler} name="name" value={comment.name}/>
+        <input type="text" onChange={changeHandler} name="name" value={comment.name} />
       </div>
 
       <div className={styles.form_control}>
         <label>email</label>
-        <input type="email" onChange={changeHandler} name="email" value={comment.email}/>
+        <input type="email" onChange={changeHandler} name="email" value={comment.email} />
       </div>
 
       <div className={styles.form_control}>
         <label>body</label>
-        <textarea type="textarea" onChange={changeHandler} name="content" value={comment.content}/>
+        <textarea type="textarea" onChange={changeHandler} name="content" value={comment.content} />
       </div>
 
       <button onClick={newPostHandler}>add Comment</button>
